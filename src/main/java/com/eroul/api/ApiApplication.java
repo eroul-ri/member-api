@@ -1,4 +1,4 @@
-package com.member.api;
+package com.eroul.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

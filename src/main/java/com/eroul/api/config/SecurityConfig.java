@@ -1,4 +1,4 @@
-package com.member.api.config;
+package com.eroul.api.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

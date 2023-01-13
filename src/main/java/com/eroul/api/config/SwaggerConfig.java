@@ -1,4 +1,4 @@
-package com.member.api.config;
+package com.eroul.api.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.member.api.biz.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.eroul.api.member.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
