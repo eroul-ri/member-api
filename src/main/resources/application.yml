@@ -11,10 +11,24 @@ spring:
             enabled: true
             settings:
                 web-allow-others: true
+    datasource:
         driver-class-name: org.h2.Driver
-        url: jdbc:h2:~/member-data;auto_server=true
+        url: jdbc:h2:~/api;auto_server=true
         username: sa
         password:
+    jpa:
+        database: H2
+        show-sql: true
+        hibernate:
+            ddl-auto: create-drop
+        open-in-view: false
+        properties:
+            hibernate:
+                format_sql: true
+
+    redis:
+        host: localhost
+        port: 6379
 
 
 

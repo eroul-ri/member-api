@@ -31,6 +31,8 @@ class ApiApplicationTests {
 
         String encPassword = passwordEncoder.encode(password);
 
+        log.info(" enc password : {}, {}", encPassword, encPassword.length());
+
         Assert.assertTrue(passwordEncoder.matches(password, encPassword));
     }
 }
