@@ -1,5 +1,6 @@
 package com.eroul.api.common;
 
+import com.eroul.api.common.codes.CommCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,5 +52,32 @@ public class CommonRespDto<T> {
             message = CommCode.FAIL.getMessage();
         }
         return new CommonRespDto<>(CommCode.FAIL.getCode(), message);
+    }
+
+    /**
+     * 에러 응답
+     * @param message
+     * @param <T>
+     * @return
+     */
+    public static <T> CommonRespDto<T> error(String message) {
+        return new CommonRespDto<>(CommCode.ERROR.getCode(), message);
+    }
+
+    /**
+     *  400 에러 응답
+     * @param message
+     * @return
+     */
+    public static CommonRespDto badRequest(String message) {
+        return new CommonRespDto<>(CommCode.ERROR.getCode(), message);
+    }
+
+    /**
+     *  NOT FOUND 에러 응답
+     * @return
+     */
+    public static CommonRespDto notFound() {
+        return new CommonRespDto<>(CommCode.NOTFOUND.getCode(), CommCode.NOTFOUND.getMessage());
     }
 }
