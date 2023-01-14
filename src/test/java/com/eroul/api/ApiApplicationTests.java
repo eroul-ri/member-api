@@ -10,8 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @Slf4j
-@SpringBootTest
 @RunWith(SpringRunner.class)
+@SpringBootTest
 class ApiApplicationTests {
 
     @Autowired
