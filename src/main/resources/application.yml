@@ -32,6 +32,10 @@ spring:
     redis:
         host: localhost
         port: 6379
-
+springdoc:
+    api-docs:
+        enabled: true
+    default-consumes-media-type: application/json
+    default-produces-media-type: application/json
 
 
