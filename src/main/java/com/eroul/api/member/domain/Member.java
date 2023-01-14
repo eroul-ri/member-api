@@ -3,13 +3,15 @@ package com.eroul.api.member.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
-@NoArgsConstructor
+
 @Getter
+@NoArgsConstructor
 @Entity
-@Table
+@Table @ToString // TODO eroul toString 개발종료시 제거 : 테스트 위해서 추가함
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,13 +24,13 @@ public class Member {
     @Column(nullable = false, length = 11, unique = true)
     private String phNumber;
     /** 사용자 이름 */
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 20)
     private String name;
     /** 사용자 패스워드 */
     @Column(nullable = false, length = 60)
     private String password;
     /** 사용자 닉네임 */
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 20)
     private String nickName;
 
     @Builder
@@ -38,5 +40,9 @@ public class Member {
         this.name = name;
         this.password = password;
         this.nickName = nickName;
+    }
+
+    public void setEncodePassword(String encodePassword) {
+        this.password = encodePassword;
     }
 }
