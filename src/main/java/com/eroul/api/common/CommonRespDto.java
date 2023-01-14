@@ -66,11 +66,11 @@ public class CommonRespDto<T> {
 
     /**
      *  400 에러 응답
-     * @param message
+     * @param data
      * @return
      */
-    public static CommonRespDto badRequest(String message) {
-        return new CommonRespDto<>(CommCode.ERROR.getCode(), message);
+    public static <T> CommonRespDto<T> badRequest(T data) {
+        return new CommonRespDto<>(CommCode.BADREQ.getCode(), CommCode.BADREQ.getMessage(), data);
     }
 
     /**
@@ -80,4 +80,5 @@ public class CommonRespDto<T> {
     public static CommonRespDto notFound() {
         return new CommonRespDto<>(CommCode.NOTFOUND.getCode(), CommCode.NOTFOUND.getMessage());
     }
+
 }
