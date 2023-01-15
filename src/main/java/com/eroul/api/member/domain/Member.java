@@ -3,7 +3,6 @@ package com.eroul.api.member.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -11,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table @ToString // TODO eroul toString 개발종료시 제거 : 테스트 위해서 추가함
+@Table
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

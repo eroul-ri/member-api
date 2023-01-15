@@ -29,8 +29,6 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint, Serializa
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        authException.printStackTrace();
-        log.error(":::{}", authException.getStackTrace());
         OutputStream out = response.getOutputStream();
 
         ObjectMapper objectMapper = new ObjectMapper();
