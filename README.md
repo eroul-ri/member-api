@@ -1,7 +1,8 @@
 ## 회원관리 API 작성
-```
+
 1. 자세한 요청과 응답은 swagger를 통해 확인 부탁드립니다.
-``` 
+2. [postman document](https://documenter.getpostman.com/view/6223744/2s8ZDSd66p)
+
 
 ### 1. 개발환경
  - JDK11 
