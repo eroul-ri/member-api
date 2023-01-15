@@ -5,10 +5,7 @@ import com.eroul.api.common.ErrorFields;
 import com.eroul.api.common.codes.Telecom;
 import com.eroul.api.common.validator.MemberEmail;
 import com.eroul.api.exception.ExistUserException;
-import com.eroul.api.member.dto.CertReqPhReq;
-import com.eroul.api.member.dto.MemberResp;
-import com.eroul.api.member.dto.MemberSignUpReq;
-import com.eroul.api.member.dto.RePasswordReq;
+import com.eroul.api.member.dto.*;
 import com.eroul.api.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -55,8 +52,8 @@ public class MemberController {
      * @param certReqPhReq
      * @return
      */
-    @Operation(summary = "휴대폰 번호 인증 발송", description = "임의로 발송됐다는 가정하에 발송 KEY 값을 리턴합니다.")
-    @PostMapping("/member/phone")
+    @Operation(summary = "휴대폰 번호 인증 발송", description = "임의로 발송되었다는 가정하에 발송 KEY 값을 리턴합니다.")
+    @PostMapping("/member/phone/certify")
     public ResponseEntity<CommonRespDto<?>> sendCertificationMemberPhone(@RequestBody @Valid CertReqPhReq certReqPhReq) {
         // 통신사 정보 미일치
         if(Telecom.findByCode(certReqPhReq.getTelecomCode()) == null) {
@@ -70,6 +67,17 @@ public class MemberController {
         }
 
         return ResponseEntity.ok(CommonRespDto.successWithData(memberService.sendCertification(certReqPhReq)));
+    }
+
+    /**
+     * 휴대폰 번호 인증 완료
+     * @param veriPhReq
+     * @return
+     */
+    @Operation(summary = "휴대폰 번호 인증 완료처리", description = "임의의 숫자 4자리로 인증완료 처리합니다.")
+    @PostMapping("/member/phone/verify")
+    public ResponseEntity<CommonRespDto<?>> verifyMemberPhone(@RequestBody @Valid VeriPhReq veriPhReq) {
+        return ResponseEntity.ok(CommonRespDto.successWithData(memberService.verify(veriPhReq)));
     }
 
     /**

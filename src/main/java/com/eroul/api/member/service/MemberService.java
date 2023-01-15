@@ -41,13 +41,18 @@ public class MemberService {
         return memberRepository.existsByPhNumber(phNumber);
     }
 
-    public String sendCertification(CertReqPhReq certReqPhReq) {
+    public String genOrderNumber() {
+        return  "SMS" + RandomStringUtils.randomNumeric(4) + System.currentTimeMillis();
+    }
 
+    public String sendCertification(CertReqPhReq certReqPhReq) {
+        // 임의 발송완료 처리
         return genOrderNumber();
     }
 
-    public String genOrderNumber() {
-        return  "SMS" + RandomStringUtils.randomNumeric(4) + System.currentTimeMillis();
+    public boolean verify(VeriPhReq veriPhReq) {
+        // 임의 인증완료 처리.
+        return true;
     }
 
     public MemberResp signupProcess(MemberSignUpReq memberSignUpReq) {
