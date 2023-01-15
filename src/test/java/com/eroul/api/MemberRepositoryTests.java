@@ -3,9 +3,11 @@ package com.eroul.api;
 import com.eroul.api.member.domain.Member;
 import com.eroul.api.member.dto.MemberResp;
 import com.eroul.api.member.dto.MemberSignUpReq;
+import com.eroul.api.member.dto.RePasswordReq;
 import com.eroul.api.member.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,22 @@ public class MemberRepositoryTests {
 
     public Member memberToEntity(MemberSignUpReq memberSignUpReq) {
         return memberSignUpReq.toEntity();
+    }
+
+    @Before
+    @Test
+    public void beforeDo() {
+        MemberSignUpReq memberSignUpReq = new MemberSignUpReq(
+                "askyws@aa.com",
+                "벼네리",
+                "",
+                "01045454544",
+                "1q2w3e4r!"
+        );
+        Member member = memberToEntity(memberSignUpReq);
+
+        member.setEncodePassword(passwordEncoder.encode(memberSignUpReq.getPassword()));
+        registerMember(member);
     }
 
     @Test
@@ -70,8 +88,44 @@ public class MemberRepositoryTests {
         log.info("transfer memberResp", new MemberResp(member));
     }
 
-    @Transactional
     public void registerMember(Member member) {
         memberRepository.save(member);
+    }
+
+    @Test
+    @Transactional
+    public void rePasswordTest() {
+        signupProcessTest();
+
+        RePasswordReq rePasswordReq = new RePasswordReq("01044444444", "01038811393");
+
+        Optional<Member> memberOptional = memberRepository.findMemberByPhNumber(rePasswordReq.getPhNumber());
+
+        Assert.assertTrue(memberOptional.isPresent());
+
+        Member member = memberOptional.get();
+
+        member.setEncodePassword(passwordEncoder.encode(rePasswordReq.getRePassword()));
+
+        getMember(rePasswordReq.getPhNumber(), member.getPassword());
+    }
+
+    public void getMember(String key, String testPassword) {
+        Optional<Member> memberOptional = memberRepository.findMemberByPhNumber(key);
+
+        Assert.assertTrue(memberOptional.isPresent());
+
+        Member member = memberOptional.get();
+
+        Assert.assertTrue(member.getPassword().equals(testPassword));
+    }
+
+    @Test
+    public void getMemberByEmail() {
+        String email = "askyws@aa.com";
+        Optional<Member> memberOptional = memberRepository.findMemberByEmail(email);
+
+        Assert.assertTrue(memberOptional.isPresent());
+
     }
 }

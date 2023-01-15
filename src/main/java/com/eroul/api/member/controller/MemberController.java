@@ -1,8 +1,14 @@
 package com.eroul.api.member.controller;
 
 import com.eroul.api.common.CommonRespDto;
+import com.eroul.api.common.ErrorFields;
+import com.eroul.api.common.codes.Telecom;
+import com.eroul.api.common.validator.MemberEmail;
+import com.eroul.api.exception.ExistUserException;
+import com.eroul.api.member.dto.CertReqPhReq;
 import com.eroul.api.member.dto.MemberResp;
 import com.eroul.api.member.dto.MemberSignUpReq;
+import com.eroul.api.member.dto.RePasswordReq;
 import com.eroul.api.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +18,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 @Validated
 @RequestMapping("/v1")
@@ -26,76 +33,78 @@ public class MemberController {
     }
 
     /**
-     * 1. 이메일 중복검사
+     * 이메일 중복검사
      * @param email
      * @return
      */
-    @Operation(summary = "이메일 중복검사")
+    @Operation(summary = "이메일 중복검사", description = "이메일 주소를 중복검사합니다.")
     @GetMapping("/member/email/{email:.*}")
-    public ResponseEntity<CommonRespDto<Boolean>> checkEmailExists(
-            @PathVariable
-            @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "올바른 형식의 이메일을 입력해주세요.")
-            String email
-    ) {
+    public ResponseEntity<CommonRespDto<Boolean>> checkEmailExists(@PathVariable @MemberEmail String email) {
         boolean exist = memberService.isExistMemberEmail(email);
 
         if(exist) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(CommonRespDto.fail("이미 존재하는 회원입니다."));
+            throw new ExistUserException("이미 존재하는 회원입니다.");
         }
         return ResponseEntity.ok(
-                CommonRespDto.successWithData(exist)
+                CommonRespDto.successWithData(false)
         );
     }
 
     /**
-     * 휴대폰 번호 인증처리
-     * @param phNumber
+     * 휴대폰 번호 인증발송처리
+     * @param certReqPhReq
      * @return
      */
-    @Operation(summary = "휴대폰 번호 인증")
-    @PostMapping("/member/phone/{phNumber}")
-    public ResponseEntity<CommonRespDto<Boolean>> certificationMemberPhone(
-            @PathVariable
-            @Pattern(regexp = "^010(?:\\d{3}|\\d{4})\\d{4}$", message = "올바른 형식의 휴대전화번호를 입력해주세요.")
-            String phNumber
-    ) {
+    @Operation(summary = "휴대폰 번호 인증 발송", description = "임의로 발송됐다는 가정하에 발송 KEY 값을 리턴합니다.")
+    @PostMapping("/member/phone")
+    public ResponseEntity<CommonRespDto<?>> sendCertificationMemberPhone(@RequestBody @Valid CertReqPhReq certReqPhReq) {
+        // 통신사 정보 미일치
+        if(Telecom.findByCode(certReqPhReq.getTelecomCode()) == null) {
+            List<ErrorFields> errorFields = new ArrayList<>();
 
-        return ResponseEntity.ok(CommonRespDto.successNoData());
+            errorFields.add(new ErrorFields("telecomCode", "통신사 코드는 지정된 값만 입력해주세요."));
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(CommonRespDto.badRequest(errorFields));
+        }
+
+        return ResponseEntity.ok(CommonRespDto.successWithData(memberService.sendCertification(certReqPhReq)));
     }
-
-    /**
-     * 휴대폰 번호 인증완료 처리
-     * PROCESS 1. 숫자 형식 4자리 일치여부 확인
-     * -> 일치응답 처리
-     */
 
     /**
      * 회원가입 처리
      * @param memberSignUpReq
      * @return
      */
-    @Operation(summary = "회원가입", responses = {
+    @Operation(summary = "회원가입", description = "회원 정보를 입력받아 회원가입 처리합니다.", responses = {
         @ApiResponse(responseCode = "201", description = "signup success"),
         @ApiResponse(responseCode = "409", description = "member duplicated")
     })
-    @PutMapping("/member")
-    public ResponseEntity<CommonRespDto<MemberResp>> signupProcess(@RequestBody @Valid MemberSignUpReq memberSignUpReq) {
+    @PutMapping("/member/signup")
+    public ResponseEntity<CommonRespDto<MemberResp>> signUpMember(@RequestBody @Valid MemberSignUpReq memberSignUpReq) {
         MemberResp memberResp = memberService.signupProcess(memberSignUpReq);
 
         if(memberResp == null) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .body(CommonRespDto.fail("이미 존재하는 회원입니다."));
+            throw new ExistUserException("이미 존재하는 회원입니다.");
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CommonRespDto.successWithData(memberResp));
     }
-    
+
     /**
-     * 로그인
+     * 패스워드 재설정
+     * @param rePasswordReq
+     * @return
      */
-    
+    @Operation(summary = "패스워드 재설정", description = "휴대폰 번호와 패스워드를 입력받아 패스워드를 재설정합니다.")
+    @PatchMapping("/member/password")
+    public ResponseEntity<CommonRespDto<MemberResp>> passwordReset(@RequestBody @Valid RePasswordReq rePasswordReq) {
+        MemberResp memberResp = memberService.setRePassword(rePasswordReq);
+
+        return ResponseEntity.ok(CommonRespDto.successWithData(memberResp));
+    }
+
+
 }

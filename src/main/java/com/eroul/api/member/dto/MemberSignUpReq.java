@@ -1,5 +1,8 @@
 package com.eroul.api.member.dto;
 
+import com.eroul.api.common.validator.MemberEmail;
+import com.eroul.api.common.validator.Password;
+import com.eroul.api.common.validator.PhNumber;
 import com.eroul.api.member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,30 +18,30 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 public class MemberSignUpReq {
     @Length(max = 150)
-    @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"
-           , message = "올바른 형식의 이메일을 입력해주세요.")
-    @NotBlank
-    @Schema(description = "이메일")
+    @MemberEmail
+    @Schema(description = "이메일", maxLength = 150, required = true)
     private String email;
 
     @Pattern(regexp = "^[가-힣]{2,20}$", message = "이름은 한글 2 ~ 20자 이내로 입력해주세요.")
     @NotBlank
+    @Schema(description = "이름", maxLength = 20, required = true)
     private String name;
 
     @Length(max = 20)
+    @Schema(description = "닉네임", maxLength = 20)
     private String nickName;
 
-    @Pattern(regexp = "^010(?:\\d{3}|\\d{4})\\d{4}$", message = "올바른 형식의 휴대전화번호를 입력해주세요.")
-    @NotBlank
+    @PhNumber
+    @Schema(description = "휴대전화번호", maxLength = 11, required = true)
     private String phNumber;
 
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{6,30}$"
-           , message = "패스워드는 영문, 숫자, 특수문자 포함 6 ~ 30자리 이내로 입력해주세요.")
-    @NotBlank
+    @Password
+    @Schema(description = "패스워드", maxLength = 30, required = true)
     private String password;
 
     public Member toEntity() {
         String nickName = this.nickName;
+        // 닉네임 미입력 : 랜덤 문자열 생성
         if(StringUtils.isEmpty(this.nickName)) {
             nickName = RandomStringUtils.randomAlphabetic(6);
         }

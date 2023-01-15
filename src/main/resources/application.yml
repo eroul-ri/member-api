@@ -29,13 +29,18 @@ spring:
     web:
         resources:
             add-mappings: false
-    redis:
-        host: localhost
-        port: 6379
+jwt:
+    secret: 20230115memeberapijwtauthorizationsecretkeysample
+    token-valid: 3600000
+
+# doc
 springdoc:
     api-docs:
         enabled: true
     default-consumes-media-type: application/json
     default-produces-media-type: application/json
+
+
+
 
 

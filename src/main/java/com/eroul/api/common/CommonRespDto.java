@@ -33,15 +33,6 @@ public class CommonRespDto<T> {
     }
 
     /**
-     * 성공응답 NODATA
-     * @param <T>
-     * @return
-     */
-    public static <T> CommonRespDto<T> successNoData() {
-        return new CommonRespDto<>(CommCode.SUCCESS.getCode(), CommCode.SUCCESS.getMessage());
-    }
-
-    /**
      * 실패 응답
      * @param message
      * @param <T>
@@ -74,11 +65,14 @@ public class CommonRespDto<T> {
     }
 
     /**
-     *  NOT FOUND 에러 응답
+     *  exception 대응 응답
      * @return
      */
-    public static CommonRespDto notFound() {
-        return new CommonRespDto<>(CommCode.NOTFOUND.getCode(), CommCode.NOTFOUND.getMessage());
+    public static CommonRespDto commonExceptionHandle(CommCode commCode, String message) {
+        if(StringUtils.isEmpty(message)) {
+            message = commCode.getMessage();
+        }
+        return new CommonRespDto<>(commCode.getCode(), message);
     }
 
 }

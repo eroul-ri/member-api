@@ -42,7 +42,10 @@ class ApiApplicationTests {
 
         Assert.assertTrue(passwordEncoder.matches(password, encPassword));
     }
-    
+
+    /**
+     * toEntiry Test
+     */
     @Test
     public void signUpReqToEntityTest() {
         MemberSignUpReq memberSignUpReq = new MemberSignUpReq(
