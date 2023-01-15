@@ -40,6 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (StringUtils.isNotEmpty(accessToken) && accessToken.startsWith("Bearer ")) {
             return accessToken.substring(7);
         }
+
         return null;
     }
 }

@@ -40,5 +40,4 @@ public class AuthDetailService implements UserDetailsService {
 
         return authorities;
     }
-
 }

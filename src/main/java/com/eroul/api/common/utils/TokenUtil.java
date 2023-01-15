@@ -55,7 +55,7 @@ public class TokenUtil {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(accessToken);
             return true;
         } catch (Exception e) {
-            log.error(" token invalid : {}", accessToken);
+            log.error("token invalid : {}", accessToken);
         }
         return false;
     }

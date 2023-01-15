@@ -11,7 +11,6 @@ import javax.validation.constraints.Pattern;
 @Getter
 @AllArgsConstructor
 public class VeriPhReq {
-
     @PhNumber
     @Schema(description = "휴대전화번호", maxLength = 11)
     private String phNumber;

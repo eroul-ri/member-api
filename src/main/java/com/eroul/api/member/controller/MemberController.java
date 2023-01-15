@@ -22,7 +22,6 @@ import java.util.List;
 @RequestMapping("/v1")
 @RestController
 public class MemberController {
-
     private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
@@ -113,6 +112,4 @@ public class MemberController {
 
         return ResponseEntity.ok(CommonRespDto.successWithData(memberResp));
     }
-
-
 }

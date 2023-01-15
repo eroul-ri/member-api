@@ -34,6 +34,7 @@ public class MyController {
         String email = principal.getName();
 
         MemberResp memberResp = memberService.getMemberInfoByEmail(email);
+
         return ResponseEntity.ok(CommonRespDto.successWithData(memberResp));
     }
 }

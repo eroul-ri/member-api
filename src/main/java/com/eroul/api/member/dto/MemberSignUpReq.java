@@ -45,6 +45,7 @@ public class MemberSignUpReq {
         if(StringUtils.isEmpty(this.nickName)) {
             nickName = RandomStringUtils.randomAlphabetic(6);
         }
+
         return Member.builder()
                      .email(this.email)
                      .name(this.name)
