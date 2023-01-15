@@ -42,7 +42,7 @@ public class TokenUtil {
 
         String accessToken = Jwts.builder()
                                 .setSubject(authentication.getName())
-                                .claim("auth", getStringAuthority((List<GrantedAuthority>) authentication.getAuthorities()))
+                                .claim(CLAIMS_AUTH_KEY, getStringAuthority((List<GrantedAuthority>) authentication.getAuthorities()))
                                 .setIssuedAt(now)
                                 .setExpiration(expiredIn)
                                 .signWith(secretKey, SignatureAlgorithm.HS256)
