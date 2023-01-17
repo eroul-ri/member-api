@@ -5,7 +5,7 @@
 
 
 ### 1. 개발환경
- - JDK11 
+ - JDK8 
  - Spring Boot 2.7.8
  - Spring Security
  - Spring doc
